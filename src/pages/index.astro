@@ -66,9 +66,11 @@ function isDirectVideo(url: string): boolean {
                 <div class="embed-wrap">
                   <video
                     src={video.url}
-                    controls
+                    autoplay
+                    muted
+                    loop
                     playsinline
-                    preload="metadata"
+                    controls
                   />
                 </div>
               )}
