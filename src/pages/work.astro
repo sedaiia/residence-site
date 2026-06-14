@@ -1,0 +1,85 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { createClient } from '@sanity/client';
+
+const client = createClient({
+  projectId: 'drbqows2',
+  dataset: 'production',
+  useCdn: true,
+  apiVersion: '2024-01-01',
+});
+
+interface GalleryImage {
+  _key?: string;
+  asset?: {
+    url: string;
+    metadata?: { dimensions?: { width: number; height: number } };
+  };
+}
+
+let images: GalleryImage[] = [];
+
+try {
+  const data = await client.fetch<{ workGallery?: GalleryImage[] }>(
+    `*[_type == "residenceSettings" && _id == "residenceSettings"][0]{
+      workGallery[] {
+        _key,
+        asset -> { url, metadata { dimensions { width, height } } }
+      }
+    }`
+  );
+  images = data?.workGallery ?? [];
+} catch {}
+---
+
+<Layout title="Work — Sedaiia Residence" currentPath="/work">
+  <div class="page">
+    {images.length === 0 ? (
+      <p class="empty">No work published yet.</p>
+    ) : (
+      <div class="gallery">
+        {images.map((img, i) => (
+          img.asset?.url && (
+            <div class="gallery-item" key={img._key ?? i}>
+              <img src={img.asset.url} alt="" loading="eager" />
+            </div>
+          )
+        ))}
+      </div>
+    )}
+  </div>
+</Layout>
+
+<style>
+  .page {
+    padding: 0 2px;
+  }
+
+  .empty {
+    text-align: center;
+    color: rgba(255,255,255,0.3);
+    font-size: 13px;
+    padding: 80px 24px;
+  }
+
+  .gallery {
+    columns: 1;
+    column-gap: 2px;
+  }
+  @media (min-width: 640px) {
+    .gallery { columns: 2; }
+  }
+  @media (min-width: 1280px) {
+    .gallery { columns: 3; }
+  }
+
+  .gallery-item {
+    break-inside: avoid;
+    margin-bottom: 2px;
+  }
+
+  .gallery-item img {
+    width: 100%;
+    display: block;
+  }
+</style>

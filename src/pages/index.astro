@@ -1,0 +1,120 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { createClient } from '@sanity/client';
+
+const client = createClient({
+  projectId: 'drbqows2',
+  dataset: 'production',
+  useCdn: true,
+  apiVersion: '2024-01-01',
+});
+
+interface ShowreelVideo {
+  _key?: string;
+  url: string;
+  caption?: string;
+}
+
+let videos: ShowreelVideo[] = [];
+
+try {
+  const data = await client.fetch<{ videos?: ShowreelVideo[] }>(
+    `*[_type == "residenceShowreel" && _id == "residenceShowreel"][0]{ videos[]{ _key, url, caption } }`
+  );
+  videos = data?.videos ?? [];
+} catch {}
+
+function getYouTubeId(url: string): string | null {
+  const match = url.match(
+    /(?:(?:www\.|m\.)?youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]+)/
+  );
+  return match ? match[1] : null;
+}
+---
+
+<Layout title="Sedaiia Residence" currentPath="/">
+  <div class="page">
+    {videos.length === 0 ? (
+      <div class="empty-state">
+        <div class="empty-placeholder"></div>
+      </div>
+    ) : (
+      <div class="video-list">
+        {videos.map((video, i) => {
+          const videoId = getYouTubeId(video.url);
+          if (!videoId) return null;
+          const isShort = video.url.includes('/shorts/');
+          return (
+            <div class="video-item" key={video._key ?? i}>
+              <div class={isShort ? 'embed-wrap short' : 'embed-wrap'}>
+                <iframe
+                  src={`https://www.youtube.com/embed/${videoId}?controls=0&rel=0&iv_load_policy=3&modestbranding=1`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                  title={video.caption ?? `Video ${i + 1}`}
+                />
+              </div>
+              {video.caption && (
+                <p class="caption">{video.caption}</p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    )}
+  </div>
+</Layout>
+
+<style>
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  @media (min-width: 768px) {
+    .page { padding: 0 48px; }
+  }
+
+  .empty-state {
+    display: flex;
+    justify-content: center;
+  }
+  .empty-placeholder {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: rgba(255,255,255,0.05);
+  }
+
+  .video-list {
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+  }
+
+  .embed-wrap {
+    width: 100%;
+    aspect-ratio: 16/9;
+    position: relative;
+  }
+  .embed-wrap.short {
+    aspect-ratio: 9/16;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+
+  .embed-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .caption {
+    margin-top: 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.45);
+    font-family: Helvetica, Arial, sans-serif;
+  }
+</style>

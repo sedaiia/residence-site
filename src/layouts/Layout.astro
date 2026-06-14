@@ -1,0 +1,268 @@
+---
+interface Props {
+  title?: string;
+  currentPath: string;
+}
+const { title = 'Sedaiia Residence', currentPath } = Astro.props;
+
+const navLinks = [
+  { href: '/',        label: 'HOME' },
+  { href: '/work',    label: 'WORK' },
+  { href: '/contact', label: 'CONTACT' },
+];
+
+function isActive(href: string): boolean {
+  if (href === '/') return currentPath === '/' || currentPath === '';
+  return currentPath.startsWith(href);
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>{title}</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #000;
+      color: #fff;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    #header-wrapper {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px;
+      background: #000;
+    }
+    @media (min-width: 768px) {
+      header { padding: 32px 48px; }
+    }
+
+    /* Logo */
+    #logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #fff;
+      font-size: 13px;
+      letter-spacing: 0.2em;
+      transition: color 0.2s;
+    }
+    #logo:hover { color: #FFCC00; }
+    #logo:hover .logo-path { fill: #FFCC00; }
+    .logo-path { fill: #F5F5F5; transition: fill 0.2s; }
+
+    #site-name { display: none; }
+    @media (min-width: 768px) { #site-name { display: inline; } }
+
+    /* Desktop nav */
+    .nav-desktop {
+      display: none;
+      align-items: center;
+      gap: 32px;
+    }
+    @media (min-width: 768px) { .nav-desktop { display: flex; } }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      color: #fff;
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .nav-link:hover { opacity: 0.6; }
+    .nav-link.active { opacity: 1; }
+    .nav-dot {
+      font-size: 10px;
+      color: #fff;
+      opacity: 0;
+      transition: opacity 0.2s, color 0.2s;
+    }
+    .nav-link.active .nav-dot { opacity: 1; }
+    .nav-link:hover .nav-dot { opacity: 1; color: #FFCC00; }
+
+    /* Hamburger */
+    #menu-toggle {
+      display: flex;
+      align-items: center;
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      opacity: 0.7;
+      padding: 0;
+      transition: opacity 0.2s;
+    }
+    #menu-toggle:hover { opacity: 1; }
+    @media (min-width: 768px) { #menu-toggle { display: none; } }
+
+    #icon-close { display: none; }
+
+    /* Mobile drawer */
+    #mobile-drawer {
+      height: 0;
+      overflow: hidden;
+      transition: height 0.35s ease;
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+    .mobile-item {
+      padding: 16px 24px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .mobile-item.has-border {
+      background-image: repeating-linear-gradient(
+        90deg,
+        rgba(255,255,255,0.9) 0,
+        rgba(255,255,255,0.9) 1px,
+        transparent 1px,
+        transparent 6px
+      );
+      background-size: 6px 1px;
+      background-position: 0 100%;
+      background-repeat: repeat-x;
+    }
+    .mobile-item a {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      color: #fff;
+      text-decoration: none;
+      opacity: 0.45;
+    }
+    .mobile-item a.active { opacity: 1; }
+
+    /* Main */
+    main {
+      padding-top: 80px;
+      padding-bottom: 96px;
+      min-height: 100vh;
+    }
+    @media (min-width: 768px) {
+      main { padding-top: 100px; }
+    }
+
+    /* Footer */
+    footer {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 50;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+    @media (min-width: 768px) { footer { padding: 32px 48px; } }
+
+    footer * { pointer-events: auto; }
+
+    .footer-copy {
+      font-size: 10px;
+      color: rgba(255,255,255,0.3);
+    }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a {
+      font-size: 10px;
+      color: rgba(255,255,255,0.3);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: rgba(255,255,255,0.6); }
+  </style>
+</head>
+<body>
+
+  <div id="header-wrapper">
+    <header>
+      <a href="/" id="logo">
+        <svg width="26" height="24" viewBox="0 0 1579 1464" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path class="logo-path" d="M845.534 1.61656C722.602 298.182 451.535 572.409 0.514358 572.336V673.003C125.651 673.003 243.586 694.9 364.534 731.053C265.042 771.834 142.698 791.747 0.587839 791.747L0 892.635C311.041 894.987 536.11 1037.68 729.509 1251.51L729.436 1097.2C607.459 969.863 488.422 899.763 340.947 848.621C403.552 831.941 451.314 813.277 507.232 787.559C595.482 835.615 654.854 878.307 728.995 935.988L728.848 801.299C679.91 766.911 664.48 754.64 624.947 730.612C717.753 671.534 766.249 632.075 845.167 563.445L845.24 417.219C727.599 549.116 639.717 613.705 508.776 677.045C441.762 648.241 399.217 632.369 341.021 617.305C545.442 540.592 699.089 415.015 844.947 213.974L844.726 207.14L844.653 0L845.167 1.61656H845.534Z"/>
+          <path class="logo-path" d="M845.534 209.344C1012.77 419.35 1222.63 568.073 1578.64 573.364V672.341C1425.36 673.958 1318.45 698.353 1210.22 734.138C1309.49 773.376 1413.83 793.216 1577.54 792.995L1577.1 892.267C1245.56 898.954 950.831 1086.03 729.876 1463.21V1245.41C852.809 1056.05 1005.06 937.751 1235.49 848.252C1167.16 827.237 1127.48 812.982 1072.22 786.75C938.78 859.642 847.444 928.933 730.905 1054.51L730.832 903.142C806.296 828.78 866.843 779.622 954.358 730.243C901.379 696.149 875.44 680.057 845.828 662.348L845.975 532.95C923.937 594.452 978.827 635.087 1069.43 678.587C1135.19 645.448 1171.34 634.499 1235.71 615.762C1063.77 547.719 971.773 481.22 845.24 370.412L845.754 209.344H845.534Z"/>
+        </svg>
+        <span id="site-name">SEDAIIA.RESIDENCE</span>
+      </a>
+
+      <nav style="display: flex; align-items: center; gap: 32px;">
+        <div class="nav-desktop">
+          {navLinks.map(({ href, label }) => (
+            <a href={href} class={`nav-link ${isActive(href) ? 'active' : ''}`}>
+              {label}<span class="nav-dot">•</span>
+            </a>
+          ))}
+        </div>
+        <button id="menu-toggle" aria-label="Menu">
+          <svg id="icon-open" width="20" height="13" viewBox="0 0 20 13" fill="none">
+            <line x1="0" y1="0.75" x2="20" y2="0.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="0" y1="6.75" x2="20" y2="6.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="0" y1="12.75" x2="20" y2="12.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <svg id="icon-close" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <line x1="1" y1="1" x2="15" y2="15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="15" y1="1" x2="1" y2="15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </nav>
+    </header>
+
+    <div id="mobile-drawer">
+      <div id="mobile-drawer-content">
+        {navLinks.map(({ href, label }, i) => (
+          <div class={`mobile-item ${i < navLinks.length - 1 ? 'has-border' : ''}`}>
+            <a href={href} class={isActive(href) ? 'active' : ''}>{label}</a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <slot />
+  </main>
+
+  <footer>
+    <p class="footer-copy">© 2026 Sedaiia — KVK 62290924</p>
+    <div class="footer-links">
+      <a href="https://sedaiia.com/privacy" target="_blank" rel="noopener">Privacy</a>
+      <a href="https://sedaiia.com/terms" target="_blank" rel="noopener">Terms</a>
+    </div>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('menu-toggle');
+    const drawer = document.getElementById('mobile-drawer');
+    const content = document.getElementById('mobile-drawer-content');
+    const iconOpen = document.getElementById('icon-open');
+    const iconClose = document.getElementById('icon-close');
+    let isOpen = false;
+
+    toggle?.addEventListener('click', () => {
+      isOpen = !isOpen;
+      if (drawer && content) {
+        drawer.style.height = isOpen ? content.scrollHeight + 'px' : '0';
+      }
+      if (iconOpen) (iconOpen as HTMLElement).style.display = isOpen ? 'none' : 'block';
+      if (iconClose) (iconClose as HTMLElement).style.display = isOpen ? 'block' : 'none';
+    });
+  </script>
+
+</body>
+</html>
