@@ -28,8 +28,8 @@ function isActive(href: string): boolean {
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background: #000;
-      color: #fff;
+      background: #F2F2F7;
+      color: #383838;
       font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
     }
@@ -46,7 +46,7 @@ function isActive(href: string): boolean {
       align-items: center;
       justify-content: space-between;
       padding: 20px 24px;
-      background: #000;
+      background: #F2F2F7;
     }
     @media (min-width: 768px) {
       header { padding: 32px 48px; }
@@ -58,14 +58,14 @@ function isActive(href: string): boolean {
       align-items: center;
       gap: 12px;
       text-decoration: none;
-      color: #fff;
+      color: #383838;
       font-size: 13px;
       letter-spacing: 0.2em;
       transition: color 0.2s;
     }
     #logo:hover { color: #FFCC00; }
     #logo:hover .logo-path { fill: #FFCC00; }
-    .logo-path { fill: #F5F5F5; transition: fill 0.2s; }
+    .logo-path { fill: #383838; transition: fill 0.2s; }
 
     #site-name { display: none; }
     @media (min-width: 768px) { #site-name { display: inline; } }
@@ -84,16 +84,16 @@ function isActive(href: string): boolean {
       gap: 4px;
       font-size: 11px;
       letter-spacing: 0.3em;
-      color: #fff;
+      color: #383838;
       text-decoration: none;
       opacity: 0.7;
       transition: opacity 0.2s;
     }
-    .nav-link:hover { opacity: 0.6; }
+    .nav-link:hover { opacity: 0.5; }
     .nav-link.active { opacity: 1; }
     .nav-dot {
       font-size: 10px;
-      color: #fff;
+      color: #383838;
       opacity: 0;
       transition: opacity 0.2s, color 0.2s;
     }
@@ -106,7 +106,7 @@ function isActive(href: string): boolean {
       align-items: center;
       background: none;
       border: none;
-      color: #fff;
+      color: #383838;
       cursor: pointer;
       opacity: 0.7;
       padding: 0;
@@ -122,29 +122,20 @@ function isActive(href: string): boolean {
       height: 0;
       overflow: hidden;
       transition: height 0.35s ease;
-      background-color: rgba(0, 0, 0, 0.9);
+      background-color: #F2F2F7;
+      border-bottom: 1px solid rgba(56,56,56,0.1);
     }
     .mobile-item {
       padding: 16px 24px;
       display: flex;
       justify-content: flex-end;
+      border-bottom: 1px solid rgba(56,56,56,0.1);
     }
-    .mobile-item.has-border {
-      background-image: repeating-linear-gradient(
-        90deg,
-        rgba(255,255,255,0.9) 0,
-        rgba(255,255,255,0.9) 1px,
-        transparent 1px,
-        transparent 6px
-      );
-      background-size: 6px 1px;
-      background-position: 0 100%;
-      background-repeat: repeat-x;
-    }
+    .mobile-item:last-child { border-bottom: none; }
     .mobile-item a {
       font-size: 11px;
       letter-spacing: 0.3em;
-      color: #fff;
+      color: #383838;
       text-decoration: none;
       opacity: 0.45;
     }
@@ -177,16 +168,16 @@ function isActive(href: string): boolean {
 
     .footer-copy {
       font-size: 10px;
-      color: rgba(255,255,255,0.3);
+      color: rgba(56,56,56,0.35);
     }
     .footer-links { display: flex; gap: 24px; }
     .footer-links a {
       font-size: 10px;
-      color: rgba(255,255,255,0.3);
+      color: rgba(56,56,56,0.35);
       text-decoration: none;
       transition: color 0.2s;
     }
-    .footer-links a:hover { color: rgba(255,255,255,0.6); }
+    .footer-links a:hover { color: rgba(56,56,56,0.7); }
   </style>
 </head>
 <body>
@@ -225,8 +216,8 @@ function isActive(href: string): boolean {
 
     <div id="mobile-drawer">
       <div id="mobile-drawer-content">
-        {navLinks.map(({ href, label }, i) => (
-          <div class={`mobile-item ${i < navLinks.length - 1 ? 'has-border' : ''}`}>
+        {navLinks.map(({ href, label }) => (
+          <div class="mobile-item">
             <a href={href} class={isActive(href) ? 'active' : ''}>{label}</a>
           </div>
         ))}

@@ -7,28 +7,11 @@ import Layout from '../layouts/Layout.astro';
     <h2 class="heading">Let's work.</h2>
 
     <form id="contact-form">
-      <input
-        type="text"
-        name="name"
-        placeholder="Name"
-        required
-        class="field all"
-      />
-      <input
-        type="text"
-        name="company"
-        placeholder="Company"
-        class="field no-top"
-      />
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        required
-        class="field no-top"
-      />
+      <input type="text"  name="name"        placeholder="Name"    required class="field" />
+      <input type="text"  name="company"     placeholder="Company"           class="field" />
+      <input type="email" name="email"       placeholder="Email"   required  class="field" />
       <div class="phone-row">
-        <select name="countryCode" class="field no-top-no-right country-select">
+        <select name="countryCode" class="field country-select">
           <option value="+1">+1</option>
           <option value="+44">+44</option>
           <option value="+31" selected>+31</option>
@@ -38,25 +21,14 @@ import Layout from '../layouts/Layout.astro';
           <option value="+81">+81</option>
           <option value="+86">+86</option>
         </select>
-        <input
-          type="tel"
-          name="phone"
-          placeholder="Phone"
-          class="field no-top-no-left phone-input"
-        />
+        <input type="tel" name="phone" placeholder="Phone" class="field phone-input" />
       </div>
-      <textarea
-        name="message"
-        placeholder="Message"
-        required
-        rows="3"
-        class="field no-top"
-      ></textarea>
+      <textarea name="message" placeholder="Message" required rows="4" class="field textarea"></textarea>
 
       <button type="submit" id="submit-btn" class="submit-btn">
         <span id="btn-label">Submit</span>
         <svg id="btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none">
-          <path d="M7 17L17 7M17 7H8M17 7V16" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M7 17L17 7M17 7H8M17 7V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
 
@@ -75,7 +47,7 @@ import Layout from '../layouts/Layout.astro';
 
 <style>
   .page {
-    max-width: 580px;
+    max-width: 520px;
     margin: 0 auto;
     padding: 0 24px;
   }
@@ -86,113 +58,81 @@ import Layout from '../layouts/Layout.astro';
   .heading {
     font-size: 22px;
     font-weight: 400;
-    margin-bottom: 32px;
+    margin-bottom: 40px;
+    color: #383838;
   }
 
-  /* Dotted borders */
   .field {
     width: 100%;
     background: transparent;
-    color: #fff;
-    font-family: 'Courier New', Courier, monospace;
+    color: #383838;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 14px;
-    font-weight: 400;
-    padding: 12px 16px;
+    padding: 14px 0;
     border: none;
+    border-bottom: 1px solid rgba(56,56,56,0.2);
     outline: none;
     display: block;
-    transition: background 0.2s;
+    transition: border-color 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
   }
-  .field::placeholder { color: rgba(255,255,255,0.4); }
-  .field:focus { background: rgba(255,255,255,0.05); }
+  .field::placeholder { color: rgba(56,56,56,0.35); }
+  .field:focus { border-bottom-color: #383838; }
 
-  .all {
-    background-image:
-      repeating-linear-gradient(90deg, rgba(255,255,255,0.9) 0, rgba(255,255,255,0.9) 1px, transparent 1px, transparent 6px),
-      repeating-linear-gradient(90deg, rgba(255,255,255,0.9) 0, rgba(255,255,255,0.9) 1px, transparent 1px, transparent 6px),
-      repeating-linear-gradient(180deg, rgba(255,255,255,0.9) 0, rgba(255,255,255,0.9) 1px, transparent 1px, transparent 6px),
-      repeating-linear-gradient(180deg, rgba(255,255,255,0.9) 0, rgba(255,255,255,0.9) 1px, transparent 1px, transparent 6px);
-    background-size: 6px 1px, 6px 1px, 1px 6px, 1px 6px;
-    background-position: 0 0, 0 100%, 0 0, 100% 0;
-    background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
-  }
-  .no-top {
-    margin-top: -1px;
-    background-image:
-      repeating-linear-gradient(90deg, rgba(255,255,255,0.9) 0, rgba(255,255,255,0.9) 1px, transparent 1px, transparent 6px),
-      repeating-linear-gradient(180deg, rgba(255,255,255,0.9) 0, rgba(255,255,255,0.9) 1px, transparent 1px, transparent 6px),
-      repeating-linear-gradient(180deg, rgba(255,255,255,0.9) 0, rgba(255,255,255,0.9) 1px, transparent 1px, transparent 6px);
-    background-size: 6px 1px, 1px 6px, 1px 6px;
-    background-position: 0 100%, 0 0, 100% 0;
-    background-repeat: repeat-x, repeat-y, repeat-y;
-  }
-
-  /* Phone row */
   .phone-row {
     display: flex;
-    margin-top: -1px;
+    gap: 16px;
   }
   .country-select {
     width: auto;
-    background-image:
-      repeating-linear-gradient(90deg, rgba(255,255,255,0.9) 0, rgba(255,255,255,0.9) 1px, transparent 1px, transparent 6px),
-      repeating-linear-gradient(180deg, rgba(255,255,255,0.9) 0, rgba(255,255,255,0.9) 1px, transparent 1px, transparent 6px);
-    background-size: 6px 1px, 1px 6px;
-    background-position: 0 100%, 0 0;
-    background-repeat: repeat-x, repeat-y;
+    flex-shrink: 0;
+    cursor: pointer;
   }
-  .country-select option { background: #000; }
-  .phone-input {
-    flex: 1;
-    background-image:
-      repeating-linear-gradient(90deg, rgba(255,255,255,0.9) 0, rgba(255,255,255,0.9) 1px, transparent 1px, transparent 6px),
-      repeating-linear-gradient(180deg, rgba(255,255,255,0.9) 0, rgba(255,255,255,0.9) 1px, transparent 1px, transparent 6px);
-    background-size: 6px 1px, 1px 6px;
-    background-position: 0 100%, 100% 0;
-    background-repeat: repeat-x, repeat-y;
+  .phone-input { flex: 1; }
+
+  .textarea {
+    resize: none;
+    line-height: 1.6;
   }
 
-  /* Submit */
   .submit-btn {
-    width: 100%;
-    margin-top: -1px;
-    background: #fff;
-    color: #000;
+    margin-top: 32px;
+    background: #383838;
+    color: #fff;
     border: none;
-    padding: 16px 24px;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 14px;
+    padding: 14px 28px;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.1em;
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 12px;
-    transition: background 0.2s;
+    gap: 10px;
+    transition: background 0.2s, color 0.2s;
   }
-  .submit-btn:hover { background: #FFCC00; }
-  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-  .submit-btn:hover #btn-arrow { transform: rotate(45deg); }
+  .submit-btn:hover { background: #FFCC00; color: #383838; }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   #btn-arrow { transition: transform 0.2s; }
+  .submit-btn:hover #btn-arrow { transform: rotate(45deg); }
 
   .error-msg {
-    color: #f87171;
+    color: #c0392b;
     font-size: 13px;
     margin-top: 12px;
-    font-family: 'Courier New', Courier, monospace;
   }
 
   .privacy-note {
-    color: rgba(255,255,255,0.3);
+    color: rgba(56,56,56,0.4);
     font-size: 11px;
-    margin-top: 16px;
-    font-family: 'Courier New', Courier, monospace;
+    margin-top: 20px;
     line-height: 1.6;
   }
   .privacy-note a {
     color: inherit;
     text-decoration: underline;
   }
-  .privacy-note a:hover { color: rgba(255,255,255,0.6); }
+  .privacy-note a:hover { color: rgba(56,56,56,0.7); }
 </style>
 
 <script>
@@ -230,7 +170,7 @@ import Layout from '../layouts/Layout.astro';
     } catch {
       btn.disabled = false;
       btnLabel.textContent = 'Submit';
-      btnArrow.style.display = 'block';
+      btnArrow.style.display = 'inline';
       errorMsg.style.display = 'block';
     }
   });
