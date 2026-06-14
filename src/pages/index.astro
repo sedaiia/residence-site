@@ -30,6 +30,10 @@ function getYouTubeId(url: string): string | null {
   );
   return match ? match[1] : null;
 }
+
+function isDirectVideo(url: string): boolean {
+  return /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(url) || url.includes('blob.vercel-storage.com');
+}
 ---
 
 <Layout title="Sedaiia Residence" currentPath="/">
@@ -41,19 +45,33 @@ function getYouTubeId(url: string): string | null {
     ) : (
       <div class="video-list">
         {videos.map((video, i) => {
-          const videoId = getYouTubeId(video.url);
-          if (!videoId) return null;
+          const youtubeId = getYouTubeId(video.url);
           const isShort = video.url.includes('/shorts/');
+          const direct = !youtubeId && isDirectVideo(video.url);
+
+          if (!youtubeId && !direct) return null;
+
           return (
             <div class="video-item" key={video._key ?? i}>
-              <div class={isShort ? 'embed-wrap short' : 'embed-wrap'}>
-                <iframe
-                  src={`https://www.youtube.com/embed/${videoId}?controls=0&rel=0&iv_load_policy=3&modestbranding=1`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen
-                  title={video.caption ?? `Video ${i + 1}`}
-                />
-              </div>
+              {youtubeId ? (
+                <div class={isShort ? 'embed-wrap short' : 'embed-wrap'}>
+                  <iframe
+                    src={`https://www.youtube.com/embed/${youtubeId}?controls=0&rel=0&iv_load_policy=3&modestbranding=1`}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    title={video.caption ?? `Video ${i + 1}`}
+                  />
+                </div>
+              ) : (
+                <div class="embed-wrap">
+                  <video
+                    src={video.url}
+                    controls
+                    playsinline
+                    preload="metadata"
+                  />
+                </div>
+              )}
               {video.caption && (
                 <p class="caption">{video.caption}</p>
               )}
@@ -102,7 +120,8 @@ function getYouTubeId(url: string): string | null {
     margin: 0 auto;
   }
 
-  .embed-wrap iframe {
+  .embed-wrap iframe,
+  .embed-wrap video {
     position: absolute;
     inset: 0;
     width: 100%;
