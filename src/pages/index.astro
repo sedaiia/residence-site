@@ -110,9 +110,10 @@ function isDirectVideo(url: string): boolean {
   }
 
   .embed-wrap {
-    width: 100%;
+    width: min(100%, calc((100vh - 180px) * 16 / 9));
     aspect-ratio: 16/9;
     position: relative;
+    margin: 0 auto;
   }
   .embed-wrap.short {
     aspect-ratio: 9/16;
