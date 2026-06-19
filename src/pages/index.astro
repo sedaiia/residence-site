@@ -109,16 +109,20 @@ function isDirectVideo(url: string): boolean {
     gap: 64px;
   }
 
+  .video-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .embed-wrap {
     width: min(100%, calc((100vh - 180px) * 16 / 9));
     aspect-ratio: 16/9;
     position: relative;
-    margin: 0 auto;
   }
   .embed-wrap.short {
     aspect-ratio: 9/16;
     max-width: 380px;
-    margin: 0 auto;
   }
 
   .embed-wrap iframe,
@@ -131,10 +135,12 @@ function isDirectVideo(url: string): boolean {
   }
 
   .caption {
+    width: min(100%, calc((100vh - 180px) * 16 / 9));
     margin-top: 16px;
     font-size: 13px;
     line-height: 1.6;
     color: rgba(56,56,56,0.5);
     font-family: Helvetica, Arial, sans-serif;
+    text-align: center;
   }
 </style>
