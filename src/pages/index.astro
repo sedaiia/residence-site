@@ -71,6 +71,7 @@ function isDirectVideo(url: string): boolean {
                     loop
                     playsinline
                     controls
+                    preload="auto"
                   />
                 </div>
               )}
@@ -84,6 +85,14 @@ function isDirectVideo(url: string): boolean {
     )}
   </div>
 </Layout>
+
+<script>
+  document.querySelectorAll<HTMLVideoElement>('video[autoplay]').forEach(v => {
+    v.play().catch(() => {
+      v.addEventListener('canplay', () => v.play().catch(() => {}), { once: true });
+    });
+  });
+</script>
 
 <style>
   .page {
